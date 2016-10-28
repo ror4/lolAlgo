@@ -47,7 +47,7 @@ public class lol {
         mids.add(new Mid("Viktor"));
         mids.add(new Mid("Ziggs"));
         mids.add(new Mid("Ahri"));
-        mids.add(new Mid("Jhin"));
+        adcs.add(new Adc("Jhin"));
         adcs.add(new Adc("Ezreal"));
         adcs.add(new Adc("Jinx"));
         adcs.add(new Adc("Lucian"));
@@ -114,7 +114,6 @@ public class lol {
 
     public static void afficherResultat(PoolChampions listechampions){
 
-        //recuperation du niveau 1 (Top)
         List<Top> listeTop = new ArrayList();
         listeTop.addAll(tops);
         List<Mid> listeMid = new ArrayList();
@@ -134,12 +133,8 @@ public class lol {
 
         while (j < 6) {
             if (listeTemp.size() > 0) {
-                listeChampions.add(listeTemp.pollFirst());
-                if(listeChampions.size()==2){
-                    if(listeChampions.get(1).name=="Zyra"){
-                        return ;
-                    }
-                }
+                Champion champManipule = listeTemp.pollFirst();
+                listeChampions.add(champManipule);
                 if (test(listeChampions)) {
                     switch (j) {
                         case 5:
@@ -151,26 +146,30 @@ public class lol {
                             System.out.print(listeChampions.get(SUPPORT).name + "(support)");
                             System.out.println("");
                             listeComboPossible.add(listeChampions);
-                            listeChampions.remove(4);
+                            listeChampions.removeLast();
                             res = res + 1;
                             break;
                         case 4:
                             listeTemp.clear();
+                            listeSupport.remove(champManipule);
                             listeTemp.addAll(listeJungle);
                             j = j + 1;
                             break;
                         case 3:
                             listeTemp.clear();
+                            listeAdc.remove(champManipule);
                             listeTemp.addAll(listeSupport);
                             j = j + 1;
                             break;
                         case 2:
                             listeTemp.clear();
+                            listeMid.remove(champManipule);
                             listeTemp.addAll(listeAdc);
                             j = j + 1;
                             break;
                         case 1:
                             listeTemp.clear();
+                            listeTop.remove(champManipule);
                             listeTemp.addAll(listeMid);
                             j = j + 1;
                             break;
@@ -195,19 +194,22 @@ public class lol {
                             break;
                         case 3:
                             listeTemp.clear();
+                            listeSupport.addAll(supports);
                             listeTemp.addAll(listeAdc);
                             break;
                         case 2:
                             listeTemp.clear();
+                            listeAdc.addAll(adcs);
                             listeTemp.addAll(listeMid);
                             break;
                         case 1:
                             listeTemp.clear();
+                            listeMid.addAll(mids);
                             listeTemp.addAll(listeTop);
                             break;
                     }
-                    System.out.println(listeTemp.get(0).name);
-                    if(true){return ;}
+//                    System.out.println(listeTemp.get(0).name);
+//                    if(true){return ;}
                 }
             }
         }
