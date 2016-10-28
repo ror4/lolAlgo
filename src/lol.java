@@ -11,10 +11,10 @@ import java.util.List;
 public class lol {
 
     static final int TOP=0;
-    static final int JUNGLE=1;
-    static final int MID=2;
-    static final int ADC=3;
-    static final int SUPPORT=4;
+    static final int JUNGLE=4;
+    static final int MID=1;
+    static final int ADC=2;
+    static final int SUPPORT=3;
     static List<Top> tops = new ArrayList();
     static List<Mid> mids = new ArrayList();
     static List<Adc> adcs = new ArrayList();
@@ -115,11 +115,16 @@ public class lol {
     public static void afficherResultat(PoolChampions listechampions){
 
         //recuperation du niveau 1 (Top)
-        List<Top> listeTop = new ArrayList(poolChampions.topListe);
-        List<Jungle> listeJungle = new ArrayList(poolChampions.jglListe);
-        List<Mid> listeMid = new ArrayList(poolChampions.midListe);
-        List<Adc> listeAdc = new ArrayList(poolChampions.adcListe);
-        List<Support> listeSupport = new ArrayList(poolChampions.supportList);
+        List<Top> listeTop = new ArrayList();
+        listeTop.addAll(tops);
+        List<Mid> listeMid = new ArrayList();
+        listeMid.addAll(mids);
+        List<Adc> listeAdc = new ArrayList();
+        listeAdc.addAll(adcs);
+        List<Support> listeSupport = new ArrayList();
+        listeSupport.addAll(supports);
+        List<Jungle> listeJungle = new ArrayList();
+        listeJungle.addAll(junglers);
         LinkedList<Champion> listeChampions = new LinkedList<>();
         LinkedList<Champion> listeTemp = new LinkedList<>();
         int j =1;
@@ -130,6 +135,11 @@ public class lol {
         while (j < 6) {
             if (listeTemp.size() > 0) {
                 listeChampions.add(listeTemp.pollFirst());
+                if(listeChampions.size()==2){
+                    if(listeChampions.get(1).name=="Zyra"){
+                        return ;
+                    }
+                }
                 if (test(listeChampions)) {
                     switch (j) {
                         case 5:
@@ -145,18 +155,22 @@ public class lol {
                             res = res + 1;
                             break;
                         case 4:
+                            listeTemp.clear();
                             listeTemp.addAll(listeJungle);
                             j = j + 1;
                             break;
                         case 3:
+                            listeTemp.clear();
                             listeTemp.addAll(listeSupport);
                             j = j + 1;
                             break;
                         case 2:
+                            listeTemp.clear();
                             listeTemp.addAll(listeAdc);
                             j = j + 1;
                             break;
                         case 1:
+                            listeTemp.clear();
                             listeTemp.addAll(listeMid);
                             j = j + 1;
                             break;
@@ -192,9 +206,12 @@ public class lol {
                             listeTemp.addAll(listeTop);
                             break;
                     }
+                    System.out.println(listeTemp.get(0).name);
+                    if(true){return ;}
                 }
             }
         }
+        return ;
     }
 
 
