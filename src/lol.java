@@ -1,59 +1,74 @@
 /**
  * Created by Formation on 25/10/2016.
  */
+import javafx.print.Collation;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class lol {
 
     static final int TOP=0;
-    static final int JUNGLE=4;
-    static final int MID=1;
-    static final int ADC=2;
-    static final int SUPPORT=3;
+    static final int JUNGLE=1;
+    static final int MID=2;
+    static final int ADC=3;
+    static final int SUPPORT=4;
+    static List<Top> tops = new ArrayList();
+    static List<Mid> mids = new ArrayList();
+    static List<Adc> adcs = new ArrayList();
+    static List<Support> supports = new ArrayList();
+    static List<Jungle> junglers = new ArrayList();
+    static PoolChampions poolChampions = new PoolChampions();
 
     public static void main(String[] args) {
 
-        List<String> champions_top = new ArrayList();
-        List<String> champions_mid = new ArrayList();
-        List<String> champions_adc = new ArrayList();
-        List<String> champions_support = new ArrayList();
-        List<String> champions_jungle = new ArrayList();
-
-        champions_top.add("Rumble");
-        champions_top.add("Kennen");
-        champions_top.add("Griar");
-        champions_top.add("Poppy");
-        champions_top.add("Jayce");
-        champions_top.add("Ekko");
-        champions_jungle.add("Nidalee");
-        champions_jungle.add("Graves");
-        champions_jungle.add("Reksai");
-        champions_jungle.add("Elise");
-        champions_jungle.add("Lee Sin");
-        champions_jungle.add("Olaf");
-        champions_mid.add("Orianna");
-        champions_mid.add("Syndra");
-        champions_mid.add("Viktor");
-        champions_mid.add("Ziggs");
-        champions_mid.add("Ahri");
-        champions_adc.add("Jhin");
-        champions_adc.add("Ezreal");
-        champions_adc.add("Jinx");
-        champions_adc.add("Lucian");
-        champions_adc.add("Tristana");
-        champions_support.add("Karma");
-        champions_support.add("Janna");
-        champions_support.add("Zyra");
-        champions_support.add("Tahm Kench");
-        champions_support.add("Taric");
-        champions_support.add("Alistar");
-        champions_support.add("Nami");
-
-        listeResultats(champions_top, champions_mid, champions_adc, champions_support, champions_jungle);
+        initializeValues();
+        afficherResultat(poolChampions);
     }
 
-    public static boolean test(List<Object> liste) {
+    private static void initializeValues() {
+
+        tops.add(new Top("Rumble"));
+        tops.add(new Top("Kennen"));
+        tops.add(new Top("Gnar"));
+        tops.add(new Top("Poppy"));
+        tops.add(new Top("Jayce"));
+        tops.add(new Top("Ekko"));
+        junglers.add(new Jungle("Nidalee"));
+        junglers.add(new Jungle("Graves"));
+        junglers.add(new Jungle("Reksai"));
+        junglers.add(new Jungle("Elise"));
+        junglers.add(new Jungle("Lee Sin"));
+        junglers.add(new Jungle("Olaf"));
+        mids.add(new Mid("Orianna"));
+        mids.add(new Mid("Syndra"));
+        mids.add(new Mid("Viktor"));
+        mids.add(new Mid("Ziggs"));
+        mids.add(new Mid("Ahri"));
+        mids.add(new Mid("Jhin"));
+        adcs.add(new Adc("Ezreal"));
+        adcs.add(new Adc("Jinx"));
+        adcs.add(new Adc("Lucian"));
+        adcs.add(new Adc("Tristana"));
+        supports.add(new Support("Karma"));
+        supports.add(new Support("Janna"));
+        supports.add(new Support("Zyra"));
+        supports.add(new Support("Tahm Kench"));
+        supports.add(new Support("Taric"));
+        supports.add(new Support("Alistar"));
+        supports.add(new Support("Nami"));
+
+        //on ajoute tout dans la pool
+        poolChampions.topListe= tops;
+        poolChampions.jglListe= junglers;
+        poolChampions.midListe= mids;
+        poolChampions.adcListe= adcs;
+        poolChampions.supportList= supports;
+    }
+
+    public static boolean test(List<Champion> liste) {
         if(liste.size()>1) {
             if (liste.get(TOP).equals("Poppy") && liste.get(MID).equals("Ziggs"))
                 return false;
@@ -97,88 +112,174 @@ public class lol {
         return true;
     }
 
-    public static List<List> listeResultats(List<String> champions_top, List<String> champions_mid,
-                                      List<String> champions_adc, List<String> champions_support, List<String> champions_jungle) {
+    public static void afficherResultat(PoolChampions listechampions){
 
-        List<List> listeResultat = new ArrayList();
-        List<Object> liste_champions = new ArrayList();
-        Integer j = 1;
-        List<String> liste_top = new ArrayList();
-        List<String> liste_mid = new ArrayList();
-        List<String> liste_adc = new ArrayList();
-        List<String> liste_support = new ArrayList();
-        List<String> liste_jungle = new ArrayList();
-        liste_top.addAll(champions_top);
-        liste_mid.addAll(champions_mid);
-        liste_adc.addAll(champions_adc);
-        liste_support.addAll(champions_support);
-        liste_jungle.addAll(champions_jungle);
-        List<String> liste = new ArrayList();
-        liste = liste_top;
-        Integer res = 1;
+        //recuperation du niveau 1 (Top)
+        List<Top> listeTop = new ArrayList(poolChampions.topListe);
+        List<Jungle> listeJungle = new ArrayList(poolChampions.jglListe);
+        List<Mid> listeMid = new ArrayList(poolChampions.midListe);
+        List<Adc> listeAdc = new ArrayList(poolChampions.adcListe);
+        List<Support> listeSupport = new ArrayList(poolChampions.supportList);
+        LinkedList<Champion> listeChampions = new LinkedList<>();
+        LinkedList<Champion> listeTemp = new LinkedList<>();
+        int j =1;
+        int res =1;
+        listeTemp.addAll(listeTop);
+        List<List> listeComboPossible= new ArrayList<>();
 
         while (j < 6) {
-            if (liste.size() > 0) {
-                liste_champions.add(liste.get(0));
-                liste.remove(0);
-                if (test(liste_champions)) {
-                    if (j == 5) {
-                        System.out.print("Resultat " + res + " : ");
-                        System.out.print(liste_champions.get(TOP) + "(top), ");
-                        System.out.print(liste_champions.get(4) + "(jungle), ");
-                        System.out.print(liste_champions.get(1) + "(mid), ");
-                        System.out.print(liste_champions.get(2) + "(adc), ");
-                        System.out.print(liste_champions.get(3) + "(support)");
-                        System.out.println("");
-                        listeResultat.add(liste_champions);
-                        liste_champions.remove(4);
-                        res = res + 1;
+            if (listeTemp.size() > 0) {
+                listeChampions.add(listeTemp.pollFirst());
+                if (test(listeChampions)) {
+                    switch (j) {
+                        case 5:
+                            System.out.print("Resultat " + res + " : ");
+                            System.out.print(listeChampions.get(TOP).name + "(top), ");
+                            System.out.print(listeChampions.get(JUNGLE).name + "(jungle), ");
+                            System.out.print(listeChampions.get(MID).name + "(mid), ");
+                            System.out.print(listeChampions.get(ADC).name + "(adc), ");
+                            System.out.print(listeChampions.get(SUPPORT).name + "(support)");
+                            System.out.println("");
+                            listeComboPossible.add(listeChampions);
+                            listeChampions.remove(4);
+                            res = res + 1;
+                            break;
+                        case 4:
+                            listeTemp.addAll(listeJungle);
+                            j = j + 1;
+                            break;
+                        case 3:
+                            listeTemp.addAll(listeSupport);
+                            j = j + 1;
+                            break;
+                        case 2:
+                            listeTemp.addAll(listeAdc);
+                            j = j + 1;
+                            break;
+                        case 1:
+                            listeTemp.addAll(listeMid);
+                            j = j + 1;
+                            break;
                     }
-                    if (j == 4) {
-                        liste = liste_jungle;
-                        j = j + 1;
-                    }
-                    if (j == 3) {
-                        liste = liste_support;
-                        j = j + 1;
-                    }
-                    if (j == 2) {
-                        liste = liste_adc;
-                        j = j + 1;
-                    }
-                    if (j == 1) {
-                        liste = liste_mid;
-                        j = j + 1;
-                    }
-                } else {
-                    liste_champions.remove(liste_champions.size() - 1);
                 }
-            } else {
+                else {
+                    listeChampions.removeLast();
+                }
+            }
+            else {
                 if (j == 1) {
                     System.out.println("fin");
                     j=6;
-                } else {
-                    liste_champions.remove(liste_champions.size() - 1);
+                }
+                else {
+                    listeChampions.removeLast();
                     j = j - 1;
-                    if (j == 4) {
-                        liste = liste_support;
-                        liste_jungle.addAll(champions_jungle);
-                    }
-                    if (j == 3) {
-                        liste = liste_adc;
-                        liste_support.addAll(champions_support);
-                    }
-                    if (j == 2) {
-                        liste = liste_mid;
-                        liste_adc.addAll(champions_adc);
-                    }
-                    if (j == 1) {
-                        liste = liste_top;
-                        liste_mid.addAll(champions_mid);
+                    switch (j) {
+                        case 4:
+                            listeTemp.clear();
+                            listeTemp.addAll(listeSupport);
+                            break;
+                        case 3:
+                            listeTemp.clear();
+                            listeTemp.addAll(listeAdc);
+                            break;
+                        case 2:
+                            listeTemp.clear();
+                            listeTemp.addAll(listeMid);
+                            break;
+                        case 1:
+                            listeTemp.clear();
+                            listeTemp.addAll(listeTop);
+                            break;
                     }
                 }
             }
         }
-        return listeResultat;
     }
+
+
+//    public static List<List> listeResultats(List<String> champions_top, List<String> champions_mid,
+//                                      List<String> champions_adc, List<String> champions_support, List<String> champions_jungle) {
+//
+//        List<List> listeResultat = new ArrayList();
+//        List<Object> liste_champions = new ArrayList();
+//        Integer j = 1;
+//        List<String> liste_top = new ArrayList();
+//        List<String> liste_mid = new ArrayList();
+//        List<String> liste_adc = new ArrayList();
+//        List<String> liste_support = new ArrayList();
+//        List<String> liste_jungle = new ArrayList();
+//        liste_top.addAll(champions_top);
+//        liste_mid.addAll(champions_mid);
+//        liste_adc.addAll(champions_adc);
+//        liste_support.addAll(champions_support);
+//        liste_jungle.addAll(champions_jungle);
+//        List<String> liste = new ArrayList();
+//        liste = liste_top;
+//        Integer res = 1;
+//
+//        while (j < 6) {
+//            if (liste.size() > 0) {
+//                liste_champions.add(liste.get(0));
+//                liste.remove(0);
+//                if (test(liste_champions)) {
+//                    if (j == 5) {
+//                        System.out.print("Resultat " + res + " : ");
+//                        System.out.print(liste_champions.get(TOP) + "(top), ");
+//                        System.out.print(liste_champions.get(JUNGLE) + "(jungle), ");
+//                        System.out.print(liste_champions.get(MID) + "(mid), ");
+//                        System.out.print(liste_champions.get(ADC) + "(adc), ");
+//                        System.out.print(liste_champions.get(SUPPORT) + "(support)");
+//                        System.out.println("");
+//                        listeResultat.add(liste_champions);
+//                        liste_champions.remove(4);
+//                        res = res + 1;
+//                    }
+//                    if (j == 4) {
+//                        liste = liste_jungle;
+//                        j = j + 1;
+//                    }
+//                    if (j == 3) {
+//                        liste = liste_support;
+//                        j = j + 1;
+//                    }
+//                    if (j == 2) {
+//                        liste = liste_adc;
+//                        j = j + 1;
+//                    }
+//                    if (j == 1) {
+//                        liste = liste_mid;
+//                        j = j + 1;
+//                    }
+//                } else {
+//                    liste_champions.remove(liste_champions.size() - 1);
+//                }
+//            } else {
+//                if (j == 1) {
+//                    System.out.println("fin");
+//                    j=6;
+//                } else {
+//                    liste_champions.remove(liste_champions.size() - 1);
+//                    j = j - 1;
+//                    if (j == 4) {
+//                        liste = liste_support;
+//                        liste_jungle.addAll(champions_jungle);
+//                    }
+//                    if (j == 3) {
+//                        liste = liste_adc;
+//                        liste_support.addAll(champions_support);
+//                    }
+//                    if (j == 2) {
+//                        liste = liste_mid;
+//                        liste_adc.addAll(champions_adc);
+//                    }
+//                    if (j == 1) {
+//                        liste = liste_top;
+//                        liste_mid.addAll(champions_mid);
+//                    }
+//                }
+//            }
+//        }
+//        return listeResultat;
+//    }
 }
