@@ -13,3 +13,4 @@ public class PoolChampions {
     List<Support> supportList = new ArrayList<>();
 
 }
+

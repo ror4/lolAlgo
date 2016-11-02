@@ -1,10 +1,8 @@
 /**
  * Created by Formation on 25/10/2016.
  */
-import javafx.print.Collation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,11 +19,13 @@ public class lol {
     static List<Support> supports = new ArrayList();
     static List<Jungle> junglers = new ArrayList();
     static PoolChampions poolChampions = new PoolChampions();
+    static testPoolChampions testPoolChampions = new testPoolChampions();
+
 
     public static void main(String[] args) {
 
         initializeValues();
-        afficherResultat(poolChampions);
+        afficherCombinaisons(testPoolChampions);
     }
 
     private static void initializeValues() {
@@ -66,6 +66,13 @@ public class lol {
         poolChampions.midListe= mids;
         poolChampions.adcListe= adcs;
         poolChampions.supportList= supports;
+
+        testPoolChampions.topListe= tops;
+        testPoolChampions.jglListe= junglers;
+        testPoolChampions.midListe= mids;
+        testPoolChampions.adcListe= adcs;
+        testPoolChampions.supportList= supports;
+
     }
 
     public static boolean test(List<Champion> liste) {
@@ -109,6 +116,47 @@ public class lol {
             if (liste.get(JUNGLE).equals("Kindred") && liste.get(MID).equals("Syndra") && liste.get(ADC).equals("Lucian"))
                 return false;
         }
+        return true;
+    }
+
+    public static void afficherCombinaisons(testPoolChampions listeChampion) {
+
+        List<List<Champion>> finalList = new ArrayList<>();
+        List<Champion> tempList = new ArrayList<>();
+
+        //on parcourt tout les combo possible
+        int total =1;
+        for (int cursorTop = 0; cursorTop < listeChampion.topListe.size(); cursorTop++) {
+            tempList.add(listeChampion.topListe.get(cursorTop));
+            for (int cursorJgl = 0; cursorJgl < listeChampion.jglListe.size(); cursorJgl++) {
+                tempList.add(listeChampion.jglListe.get(cursorJgl));
+                for (int cursorMid = 0; cursorMid < listeChampion.midListe.size(); cursorMid++) {
+                    tempList.add(listeChampion.midListe.get(cursorMid));
+                    for (int cursorAdc = 0; cursorAdc < listeChampion.adcListe.size(); cursorAdc++) {
+                        tempList.add(listeChampion.adcListe.get(cursorAdc));
+                        for (int cursorSupp = 0; cursorSupp < listeChampion.supportList.size(); cursorSupp++) {
+                            tempList.add(listeChampion.supportList.get(cursorSupp));
+                            if(confirmAdd(tempList)) {
+                                finalList.add(tempList);
+                                System.out.print("Combo n°"+total+": ");
+                                System.out.print(tempList.get(0).name);
+                                System.out.print(" - "+tempList.get(1).name);
+                                System.out.print(" - "+tempList.get(2).name);
+                                System.out.print(" - "+tempList.get(3).name);
+                                System.out.print(" - "+tempList.get(4).name);
+                                System.out.println();
+                                total++;
+                            }
+                            tempList.clear();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean confirmAdd(List<Champion> tempList) {
+        //si les criteres sont ok alors on ajoute
         return true;
     }
 
